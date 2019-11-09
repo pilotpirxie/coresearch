@@ -11,15 +11,23 @@ namespace coresearch
             Coresearch coresearch = new Coresearch();
 
             int i = 0;
-            foreach (string file in Directory.EnumerateFiles("./bbc", "*.txt", SearchOption.AllDirectories))
+            foreach (string file in Directory.EnumerateFiles("./", "*.txt", SearchOption.AllDirectories))
             {
-                string contents = File.ReadAllText(file);
-                coresearch.Insert(file, contents, file);
+                foreach (string line in File.ReadLines(file))
+                {
+                    coresearch.InsertResource(file, line, file);
+                    if (i % 10000 == 0)
+                    {
+                        GC.Collect();
+                    }
+                }
+
+                GC.Collect();
                 i++;
             }
 
             Console.WriteLine($"Files added {i}");
-            Console.WriteLine($"Words inserted ${coresearch.Count}");
+            Console.WriteLine($"Words inserted {coresearch.Count}");
 
             while (true)
             {
