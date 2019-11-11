@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using coresearch;
 
 namespace TrieTest
@@ -8,6 +9,7 @@ namespace TrieTest
         static void Main(string[] args)
         {
             Trie trie = new Trie();
+
             trie.Insert("one", "english");
             trie.Insert("two", "english");
             trie.Insert("three", "english");
@@ -38,8 +40,19 @@ namespace TrieTest
             trie.Insert("car", "english");
 
 
-            Console.WriteLine("Done.");
-            Console.ReadKey();
+            Console.WriteLine($"Done. {trie.Size} inserted");
+
+            while (true)
+            {
+                string userInput = Console.ReadLine();
+
+                HashSet<string> results = trie.GetData(userInput);
+
+                foreach (string el in results)
+                {
+                    Console.WriteLine(el);
+                }
+            }
         }
     }
 }

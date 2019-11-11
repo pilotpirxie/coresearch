@@ -34,6 +34,7 @@ namespace coresearch
                 string userInput = Console.ReadLine();
 
                 List<string> results = coresearch.Get(userInput);
+                Console.WriteLine($"{results.Count} results for {userInput}");
 
                 foreach (string el in results)
                 {

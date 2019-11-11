@@ -106,15 +106,13 @@ namespace coresearch
             Node commonPrefix = Prefix(key);
             Node current = commonPrefix;
 
-            for (int i = 0; i < key.Length; i++)
-            { 
+            for (int i = current.Depth; i < key.Length; i++)
+            {
                 Node newNode = new Node(current, key[i], null, current.Depth + 1);
                 current.Children.Add(newNode);
                 current = newNode;
-                _size++;
+                _size += 1;
             }
-
-            current.Data.Add(data);
         }
 
         public bool ContainsKey(string key)
@@ -125,9 +123,9 @@ namespace coresearch
 
         public HashSet<string> GetData(string key)
         {
-            Node prefix = Prefix(key);
-            if (prefix.Depth == key.Length && prefix.ContainsData())
+            if (ContainsKey(key))
             {
+                Node prefix = Prefix(key);
                 return prefix.Data;
             } 
 
