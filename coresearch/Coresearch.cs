@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace coresearch
 {
-    class Coresearch
+    public class Coresearch
     {
         private ConcurrentDictionary<string, HashSet<string>> words = new ConcurrentDictionary<string, HashSet<string>>();
         private int _count = 0;
@@ -36,6 +36,7 @@ namespace coresearch
             {
                 words.TryAdd(word, new HashSet<string>() { resourceName });
             }
+            
         }
 
         public void InsertResource(string resourceName, string content, string meta)
