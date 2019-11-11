@@ -8,7 +8,7 @@ namespace coresearch
 {
     public class Coresearch
     {
-        private ConcurrentDictionary<string, HashSet<string>> words = new ConcurrentDictionary<string, HashSet<string>>();
+        private Trie words = new Trie();
         private int _count = 0;
         private Regex rgx = new Regex("[^a-zA-Z0-9 -]");
 
@@ -23,19 +23,12 @@ namespace coresearch
 
             word = word.Trim();
 
-            if (Count % 500000 == 0)
+            if (Count % 5000 == 0)
             {
                 Console.WriteLine($"Batch {Count}");
             }
 
-            if (words.ContainsKey(word))
-            {
-                words[word].Add(resourceName);
-            }
-            else
-            {
-                words.TryAdd(word, new HashSet<string>() { resourceName });
-            }
+            words.Insert(word, resourceName);
             
         }
 
@@ -56,7 +49,7 @@ namespace coresearch
 
             if (words.ContainsKey(word))
             {
-                HashSet<string> hs = words[word];
+                HashSet<string> hs = words.GetData(word);
                 foreach (string el in hs)
                 {
                     toReturn.Add(el);

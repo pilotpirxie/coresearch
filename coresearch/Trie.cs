@@ -112,15 +112,26 @@ namespace coresearch
             current.Data.Add(data);
         }
 
-        public bool Contains(string key)
+        public bool ContainsKey(string key)
         {
             Node prefix = Prefix(key);
             return prefix.Depth == key.Length && prefix.ContainsData();
         }
 
+        public HashSet<string> GetData(string key)
+        {
+            Node prefix = Prefix(key);
+            if (prefix.Depth == key.Length && prefix.ContainsData())
+            {
+                return prefix.Data;
+            } 
+
+            return new HashSet<string> () { };
+        }
+
         public void Remove(string key)
         {
-            if (Contains(key))
+            if (ContainsKey(key))
             {
                 Node prefix = Prefix(key);
 
