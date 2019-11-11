@@ -73,10 +73,14 @@ namespace coresearch
     public class Trie
     {
         private readonly Node _root;
+        private int _size;
+
+        public int Size { get => _size; set => _size = value; }
 
         public Trie()
         {
             _root = new Node(null, ' ', null, 0);
+            _size = 0;
         }
 
         public Node Prefix(string keyPrefix)
@@ -107,6 +111,7 @@ namespace coresearch
                 Node newNode = new Node(current, key[i], null, current.Depth + 1);
                 current.Children.Add(newNode);
                 current = newNode;
+                _size++;
             }
 
             current.Data.Add(data);
