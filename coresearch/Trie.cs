@@ -111,5 +111,34 @@ namespace coresearch
 
             current.Data.Add(data);
         }
+
+        public bool Contains(string key)
+        {
+            Node prefix = Prefix(key);
+            return prefix.Depth == key.Length && prefix.ContainsData();
+        }
+
+        public void Remove(string key)
+        {
+            if (Contains(key))
+            {
+                Node prefix = Prefix(key);
+
+                while (prefix.IsLeaf())
+                {
+                    Node parent = prefix.Parent;
+                    parent.DeleteChildByKey(prefix.Key);
+                    prefix = parent;
+                }
+            }
+        }
+
+        public void BatchInsert(List<KeyValuePair<string, string>> items)
+        {
+            foreach(KeyValuePair<string, string> item in items)
+            {
+                Insert(item.Key, item.Value);
+            }
+        }
     }
 }
