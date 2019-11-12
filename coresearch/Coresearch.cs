@@ -28,7 +28,7 @@ namespace coresearch
 
             if (_debug && Count % 50000 == 0)
             {
-                Console.WriteLine($"Batch {Count} with total {words.Size}");
+                Console.WriteLine($"Batch {Count} with total {words.Size} nodes");
             }
 
             words.Insert(word, resourceName);
