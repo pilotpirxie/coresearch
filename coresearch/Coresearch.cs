@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
 namespace coresearch
@@ -10,26 +8,30 @@ namespace coresearch
     {
         private Trie words = new Trie();
         private int _count = 0;
+        private bool _debug = false;
         private Regex rgx = new Regex("[^a-zA-Z0-9 -]");
 
-        public int Count {
-            get => _count;
+        public Coresearch(bool debug)
+        {
+            _debug = debug;
         }
+
+        public bool Debug { get => _debug; set => _debug = value; }
+
+        public int Count { get => _count; }
 
         private void AddKey(string word, string resourceName)
         {
             _count++;
 
-            string wordToInsert = rgx.Replace(word, " ");
-            wordToInsert = wordToInsert.Trim();
-            wordToInsert = wordToInsert.ToLower();
+            string wordToInsert = PreProcessWord(word);
 
-            if (Count % 5000 == 0)
+            if (_debug && Count % 50000 == 0)
             {
                 Console.WriteLine($"Batch {Count} with total {words.Size}");
             }
 
-            words.Insert(wordToInsert, resourceName);
+            words.Insert(word, resourceName);
             
         }
 
@@ -43,15 +45,22 @@ namespace coresearch
             }
         }
 
+        public string PreProcessWord(string word)
+        {
+            string wordToReturn = rgx.Replace(word, "");
+            wordToReturn = wordToReturn.Trim();
+            wordToReturn = wordToReturn.ToLower();
+
+            return wordToReturn;
+        }
+
         public List<string> Get(string word)
         {
-            string wordToSearch = rgx.Replace(word, "");
-            wordToSearch = wordToSearch.Trim();
-            wordToSearch = wordToSearch.ToLower();
+            string wordToSearch = PreProcessWord(word);
 
             List<string> toReturn = new List<string>();
 
-            HashSet<string> hs = words.GetData(word);
+            HashSet<string> hs = words.GetData(wordToSearch);
 
             foreach (string el in hs)
             {

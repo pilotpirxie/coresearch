@@ -8,25 +8,20 @@ namespace coresearch
     {
         static void Main(string[] args)
         {
-            Coresearch coresearch = new Coresearch();
+            // sample data http://mlg.ucd.ie/datasets/bbc.html
+            Coresearch coresearch = new Coresearch(true);
 
-            int i = 0;
             foreach (string file in Directory.EnumerateFiles("./", "*.txt", SearchOption.AllDirectories))
             {
                 foreach (string line in File.ReadLines(file))
                 {
-                    coresearch.InsertResource(file, line, file);
-                    if (i % 10000 == 0)
-                    {
-                        GC.Collect();
-                    }
+                    coresearch.InsertResource(file, line.Replace(";", ""), file);
                 }
 
                 GC.Collect();
-                i++;
+                
             }
 
-            Console.WriteLine($"Files added {i}");
             Console.WriteLine($"Words inserted {coresearch.Count}");
 
             while (true)

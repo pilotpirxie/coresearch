@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace coresearch
 {
@@ -113,6 +110,8 @@ namespace coresearch
                 current = newNode;
                 _size += 1;
             }
+
+            current.Data.Add(data);
         }
 
         public bool ContainsKey(string key)
