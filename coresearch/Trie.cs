@@ -1,23 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace coresearch
 {
     public class Node
     {
         private Node _parent;
-        private char _key;
+        private string _key;
         private HashSet<string> _data = new HashSet<string>();
         private List<Node> _children = new List<Node>();
         private int _depth = 0;
 
         internal Node Parent { get => _parent; set => _parent = value; }
-        public char Key { get => _key; set => _key = value; }
+        public string Key { get => _key; set => _key = value; }
         public HashSet<string> Data { get => _data; set => _data = value; }
         public List<Node> Children { get => _children; set => _children = value; }
         public int Depth { get => _depth; set => _depth = value; }
 
-        public Node(Node parent, char key, string data = null, int depth = 0)
+        public Node(Node parent, string key, string data = null, int depth = 0)
         {
+            if (parent != null)
+            {
+                Console.WriteLine($"{parent.Key} {key}");
+            }
+
             Parent = parent;
             Key = key;
             if (data != null)
@@ -27,9 +33,9 @@ namespace coresearch
             Depth = depth;
         }
 
-        public Node GetChildByKey(char key)
+        public Node GetChildByKey(string key)
         {
-            for(int i = 0; i < _children.Count; i++)
+            for (int i = 0; i < _children.Count; i++)
             {
                 if (_children[i].Key == key)
                 {
@@ -40,7 +46,30 @@ namespace coresearch
             return null;
         }
 
-        public void DeleteChildByKey(char key)
+        public (Node, int) FindCommonChildByKey(string key)
+        {
+            Node nodeToReturn = null;
+            int commonLengthToReturn = 0;
+            for (int i = 0; i < _children.Count; i++)
+            {
+                for (int j = 0; j < key.Length && j < _children[i].Key.Length; j++)
+                {
+                    if (_children[i].Key[j] == key[j])
+                    {
+                        nodeToReturn = _children[i];
+                        commonLengthToReturn = j + 1;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return (nodeToReturn, commonLengthToReturn);
+        }
+
+        public void DeleteChildByKey(string key)
         {
             for (int i = 0; i < _children.Count; i++)
             {
@@ -76,47 +105,65 @@ namespace coresearch
 
         public Trie()
         {
-            _root = new Node(null, ' ', null, 0);
+            _root = new Node(null, " ", null, 0);
             _size = 0;
         }
 
-        public Node Prefix(string keyPrefix)
+        public (Node, int) Prefix(string keyPrefix)
         {
             Node currentNode = _root;
-            Node result = currentNode;
+            Node nodeToReturn = currentNode;
 
-            foreach (char keyPrefixChar in keyPrefix)
+            int currentCommonLength = 0;
+            int lengthToReturn = currentCommonLength;
+
+            while (currentNode != null)
             {
-                currentNode = currentNode.GetChildByKey(keyPrefixChar);
-                if (currentNode == null)
+                (currentNode, currentCommonLength) = currentNode.FindCommonChildByKey(keyPrefix.Substring(currentCommonLength));
+                if (currentNode != null)
                 {
-                    break;
+                    nodeToReturn = currentNode;
+                    lengthToReturn += currentCommonLength;
                 }
-                result = currentNode;
             }
 
-            return result;
+            return (nodeToReturn, lengthToReturn);
         }
 
         public void Insert(string key, string data)
         {
-            Node commonPrefix = Prefix(key);
-            Node current = commonPrefix;
+            (Node current, int commonLength) = Prefix(key);
+            Console.WriteLine($"--- {key} {current.Key} {commonLength}");
 
-            for (int i = current.Depth; i < key.Length; i++)
+            if (commonLength > 0)
             {
-                Node newNode = new Node(current, key[i], null, current.Depth + 1);
+                if (commonLength != current.Key.Length)
+                {
+                    Node newNode = new Node(current, key.Substring(0, commonLength), data, current.Depth + 1);
+                    newNode.Children.Add(current);
+
+                    current.Parent.Children.Add(newNode);
+                    current.Key = key.Substring(commonLength);
+                }
+                else
+                {
+                    Node newNode = new Node(current, key.Substring(commonLength), data, current.Depth + 1);
+                    current.Children.Add(current);
+                }
+            }
+            else
+            {
+                Node newNode = new Node(current, key, data, current.Depth + 1);
                 current.Children.Add(newNode);
-                current = newNode;
-                _size += 1;
             }
 
-            current.Data.Add(data);
+            _size += 1;
+
         }
 
         public bool ContainsKey(string key)
         {
-            Node prefix = Prefix(key);
+            (Node prefix, _) = Prefix(key);
             return prefix.Depth == key.Length && prefix.ContainsData();
         }
 
@@ -124,7 +171,7 @@ namespace coresearch
         {
             if (ContainsKey(key))
             {
-                Node prefix = Prefix(key);
+                (Node prefix, _) = Prefix(key);
                 return prefix.Data;
             } 
 
@@ -135,7 +182,7 @@ namespace coresearch
         {
             if (ContainsKey(key))
             {
-                Node prefix = Prefix(key);
+                (Node prefix, _) = Prefix(key);
 
                 while (prefix.IsLeaf())
                 {
