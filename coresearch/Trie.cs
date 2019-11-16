@@ -5,18 +5,18 @@ namespace coresearch
     public class Node
     {
         private Node _parent;
-        private char _key;
+        private string _key;
         private HashSet<string> _data = new HashSet<string>();
         private List<Node> _children = new List<Node>();
         private int _depth = 0;
 
         internal Node Parent { get => _parent; set => _parent = value; }
-        public char Key { get => _key; set => _key = value; }
+        public string Key { get => _key; set => _key = value; }
         public HashSet<string> Data { get => _data; set => _data = value; }
         public List<Node> Children { get => _children; set => _children = value; }
         public int Depth { get => _depth; set => _depth = value; }
 
-        public Node(Node parent, char key, string data = null, int depth = 0)
+        public Node(Node parent, string key, string data = null, int depth = 0)
         {
             Parent = parent;
             Key = key;
@@ -27,7 +27,7 @@ namespace coresearch
             Depth = depth;
         }
 
-        public Node GetChildByKey(char key)
+        public Node GetChildByKey(string key)
         {
             for(int i = 0; i < _children.Count; i++)
             {
@@ -40,7 +40,7 @@ namespace coresearch
             return null;
         }
 
-        public void DeleteChildByKey(char key)
+        public void DeleteChildByKey(string key)
         {
             for (int i = 0; i < _children.Count; i++)
             {
@@ -76,7 +76,7 @@ namespace coresearch
 
         public Trie()
         {
-            _root = new Node(null, ' ', null, 0);
+            _root = new Node(null, " ", null, 0);
             _size = 0;
         }
 
@@ -87,7 +87,7 @@ namespace coresearch
 
             foreach (char keyPrefixChar in keyPrefix)
             {
-                currentNode = currentNode.GetChildByKey(keyPrefixChar);
+                currentNode = currentNode.GetChildByKey(keyPrefixChar.ToString());
                 if (currentNode == null)
                 {
                     break;
@@ -105,7 +105,7 @@ namespace coresearch
 
             for (int i = current.Depth; i < key.Length; i++)
             {
-                Node newNode = new Node(current, key[i], null, current.Depth + 1);
+                Node newNode = new Node(current, key[i].ToString(), null, current.Depth + 1);
                 current.Children.Add(newNode);
                 current = newNode;
                 _size += 1;
