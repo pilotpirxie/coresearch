@@ -80,12 +80,19 @@ namespace coresearch
             _size = 0;
         }
 
-        public int CommonPrefixLength(Node node1, Node node2)
+        private static int CommonKeyLength(string key1, string key2)
         {
             int lengthToReturn = 0;
-            for (int i = 0; i < node1.Key.Length && i < node2.Key.Length; i++)
+            for (int i = 0; i < key1.Length && i < key2.Length; i++)
             {
-                lengthToReturn++;
+                if (key1[i] == key2[i])
+                {
+                    lengthToReturn++;
+                }
+                else
+                {
+                    break;
+                }
             }
             return lengthToReturn;
         }
@@ -112,7 +119,36 @@ namespace coresearch
         {
             Node commonPrefix = Prefix(key, _root);
             Node current = commonPrefix;
+            int commonKeyLength = CommonKeyLength(key, commonPrefix.Key);
 
+            if (commonKeyLength > 0)
+            {
+                Node nodeWithCommonKeyPrefix = new Node(current.Parent, key.Substring(0, commonKeyLength - 1), null, current.Depth + 1);
+                _size++;
+
+                nodeWithCommonKeyPrefix.Children.Add(current);
+                current.Parent.Children.Add(nodeWithCommonKeyPrefix);
+                current.Key = current.Key.Substring(commonKeyLength);
+                current.Parent.Children.Remove(current);
+                current.Parent = nodeWithCommonKeyPrefix;
+            }
+
+            if (key.Substring(commonKeyLength).Length > 0)
+            {
+                if (current.Parent != null)
+                {
+                    Node nodeWithUncommonKeyPrefix = new Node(current.Parent, key.Substring(commonKeyLength), data, current.Depth + 1);
+                    current.Parent.Children.Add(nodeWithUncommonKeyPrefix);
+                }
+                else
+                {
+                    Node nodeWithUncommonKeyPrefix = new Node(current, key.Substring(commonKeyLength), data, current.Depth + 1);
+                    current.Children.Add(nodeWithUncommonKeyPrefix);
+                }
+                _size++;
+            }
+
+            /* 
             for (int i = current.Depth; i < key.Length; i++)
             {
                 Node newNode = new Node(current, key[i].ToString(), null, current.Depth + 1);
@@ -120,8 +156,7 @@ namespace coresearch
                 current = newNode;
                 _size += 1;
             }
-
-            current.Data.Add(data);
+            */
         }
 
         public bool ContainsKey(string key)
