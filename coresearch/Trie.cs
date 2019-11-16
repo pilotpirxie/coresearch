@@ -80,10 +80,20 @@ namespace coresearch
             _size = 0;
         }
 
-        public Node Prefix(string keyPrefix)
+        public int CommonPrefixLength(Node node1, Node node2)
         {
-            Node currentNode = _root;
-            Node result = currentNode;
+            int lengthToReturn = 0;
+            for (int i = 0; i < node1.Key.Length && i < node2.Key.Length; i++)
+            {
+                lengthToReturn++;
+            }
+            return lengthToReturn;
+        }
+
+        public Node Prefix(string keyPrefix, Node startNode)
+        {
+            Node currentNode = startNode;
+            Node nodeToReturn = currentNode;
 
             foreach (char keyPrefixChar in keyPrefix)
             {
@@ -92,15 +102,15 @@ namespace coresearch
                 {
                     break;
                 }
-                result = currentNode;
+                nodeToReturn = currentNode;
             }
 
-            return result;
+            return nodeToReturn;
         }
 
         public void Insert(string key, string data)
         {
-            Node commonPrefix = Prefix(key);
+            Node commonPrefix = Prefix(key, _root);
             Node current = commonPrefix;
 
             for (int i = current.Depth; i < key.Length; i++)
@@ -116,7 +126,7 @@ namespace coresearch
 
         public bool ContainsKey(string key)
         {
-            Node prefix = Prefix(key);
+            Node prefix = Prefix(key, _root);
             return prefix.Depth == key.Length && prefix.ContainsData();
         }
 
@@ -124,7 +134,7 @@ namespace coresearch
         {
             if (ContainsKey(key))
             {
-                Node prefix = Prefix(key);
+                Node prefix = Prefix(key, _root);
                 return prefix.Data;
             } 
 
@@ -135,7 +145,7 @@ namespace coresearch
         {
             if (ContainsKey(key))
             {
-                Node prefix = Prefix(key);
+                Node prefix = Prefix(key, _root);
 
                 while (prefix.IsLeaf())
                 {
