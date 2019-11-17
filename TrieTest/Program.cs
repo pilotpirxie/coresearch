@@ -18,7 +18,6 @@ namespace TrieTest
 
 
             Console.WriteLine($"Done. {trie.Size} inserted");
-            trie.WriteAllData();
 
             while (true)
             {
