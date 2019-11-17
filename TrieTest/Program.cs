@@ -25,8 +25,6 @@ namespace TrieTest
                 string userInput = Console.ReadLine();
 
                 HashSet<string> results = trie.GetData(userInput);
-                Node tr = trie.Prefix(userInput, trie.Root);
-                Console.WriteLine($"{tr.GetHashCode()} {tr.Key}");
 
                 foreach (string el in results)
                 {

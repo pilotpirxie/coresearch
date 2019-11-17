@@ -45,7 +45,6 @@ namespace coresearch
         {
             for (int i = 0; i < _children.Count; i++)
             {
-                Console.WriteLine($"{_children[i].Key} {atStart}");
                 if (_children[i].Key.StartsWith(atStart))
                 {
                     return _children[i];
@@ -88,7 +87,6 @@ namespace coresearch
         private int _size;
 
         public int Size { get => _size; set => _size = value; }
-        public Node Root { get => _root; }
 
         public Trie()
         {
@@ -118,7 +116,7 @@ namespace coresearch
             Node currentNode = startingNode;
             Node nodeToReturn = currentNode;
 
-            for (int i = 0; i < keyPrefix.Length; i = CommonKeyLength(keyPrefix, nodeToReturn.Key))
+            for (int i = 0; i < keyPrefix.Length; i = CommonKeyLength(keyPrefix, nodeToReturn.Key) - 1)
             {
                 currentNode = currentNode.GetChildStartingWith(keyPrefix[i]);
                 if (currentNode == null)
