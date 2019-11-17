@@ -147,10 +147,6 @@ namespace coresearch
                 }
                 _size++;
             }
-            else
-            {
-                current.Data.Add(data);
-            }
 
             /* 
             for (int i = current.Depth; i < key.Length; i++)
