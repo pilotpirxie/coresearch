@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace coresearch
 {
@@ -29,9 +30,22 @@ namespace coresearch
 
         public Node GetChildByKey(string key)
         {
-            for(int i = 0; i < _children.Count; i++)
+            for (int i = 0; i < _children.Count; i++)
             {
                 if (_children[i].Key == key)
+                {
+                    return _children[i];
+                }
+            }
+
+            return null;
+        }
+
+        public Node GetChildStartingWith(char atStart)
+        {
+            for (int i = 0; i < _children.Count; i++)
+            {
+                if (_children[i].Key.StartsWith(atStart))
                 {
                     return _children[i];
                 }
@@ -97,14 +111,14 @@ namespace coresearch
             return lengthToReturn;
         }
 
-        public Node Prefix(string keyPrefix, Node startNode)
+        public Node Prefix(string keyPrefix, Node startingNode)
         {
-            Node currentNode = startNode;
+            Node currentNode = startingNode;
             Node nodeToReturn = currentNode;
 
-            foreach (char keyPrefixChar in keyPrefix)
+            for (int i = 0; i < keyPrefix.Length; i = CommonKeyLength(keyPrefix, nodeToReturn.Key) - 1)
             {
-                currentNode = currentNode.GetChildByKey(keyPrefixChar.ToString());
+                currentNode = currentNode.GetChildStartingWith(keyPrefix[i]);
                 if (currentNode == null)
                 {
                     break;
@@ -121,9 +135,9 @@ namespace coresearch
             Node current = commonPrefix;
             int commonKeyLength = CommonKeyLength(key, commonPrefix.Key);
 
-            if (commonKeyLength > 0)
+            if (commonKeyLength > 0 && key.Substring(0, commonKeyLength).Length > 0)
             {
-                Node nodeWithCommonKeyPrefix = new Node(current.Parent, key.Substring(0, commonKeyLength - 1), null, current.Depth + 1);
+                Node nodeWithCommonKeyPrefix = new Node(current.Parent, key.Substring(0, commonKeyLength), null, current.Depth + 1);
                 _size++;
 
                 nodeWithCommonKeyPrefix.Children.Add(current);
@@ -200,6 +214,24 @@ namespace coresearch
             foreach(KeyValuePair<string, string> item in items)
             {
                 Insert(item.Key, item.Value);
+            }
+        }
+
+        public void WriteAllData()
+        {
+            WriteData(_root);
+        }
+
+        public void WriteData(Node node)
+        {
+            if (node.Parent != null)
+            {
+                Console.WriteLine($"{node.Parent.GetHashCode()} {node.GetHashCode()} {node.Parent.Key} {node.Key}");
+            }
+
+            for (int i = 0; i < node.Children.Count; i++)
+            {
+                WriteData(node.Children[i]);
             }
         }
     }
