@@ -80,7 +80,7 @@ namespace coresearch
             _size = 0;
         }
 
-        public Node Prefix(string keyPrefix)
+        public Node TraversePrefix(string keyPrefix)
         {
             Node currentNode = _root;
             Node result = currentNode;
@@ -100,7 +100,7 @@ namespace coresearch
 
         public void Insert(string key, string data)
         {
-            Node commonPrefix = Prefix(key);
+            Node commonPrefix = TraversePrefix(key);
             Node current = commonPrefix;
 
             for (int i = current.Depth; i < key.Length; i++)
@@ -116,7 +116,7 @@ namespace coresearch
 
         public bool ContainsKey(string key)
         {
-            Node prefix = Prefix(key);
+            Node prefix = TraversePrefix(key);
             return prefix.Depth == key.Length && prefix.ContainsData();
         }
 
@@ -124,7 +124,7 @@ namespace coresearch
         {
             if (ContainsKey(key))
             {
-                Node prefix = Prefix(key);
+                Node prefix = TraversePrefix(key);
                 return prefix.Data;
             } 
 
@@ -135,12 +135,13 @@ namespace coresearch
         {
             if (ContainsKey(key))
             {
-                Node prefix = Prefix(key);
+                Node prefix = TraversePrefix(key);
 
                 while (prefix.IsLeaf())
                 {
                     Node parent = prefix.Parent;
                     parent.DeleteChildByKey(prefix.Key);
+                    _size -= 1;
                     prefix = parent;
                 }
             }

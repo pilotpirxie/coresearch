@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace coresearch
 {
-    public class Coresearch
+    public class Coresearch : IDictionary<string, string>
     {
-        private Trie words = new Trie();
+        private Trie trie = new Trie();
         private int _count = 0;
         private bool _debug = false;
         private Regex rgx = new Regex("[^a-zA-Z0-9 -]");
@@ -20,18 +21,30 @@ namespace coresearch
 
         public int Count { get => _count; }
 
-        private void AddKey(string word, string resourceName)
+        public ICollection<string> Keys => throw new NotImplementedException();
+
+        public ICollection<string> Values => throw new NotImplementedException();
+
+        public bool IsReadOnly => throw new NotImplementedException();
+
+        string IDictionary<string, string>.this[string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public object this[string key] {
+            get => Get(key.ToString());
+            set => AddKey(key.ToString(), value.ToString());
+        }
+
+        private void AddKey(string key, string resourceName)
         {
             _count++;
 
-            string wordToInsert = PreProcessWord(word);
+            string wordToInsert = PreProcessWord(key);
 
             if (_debug && Count % 50000 == 0)
             {
-                Console.WriteLine($"Batch {Count} with total {words.Size} nodes");
+                Console.WriteLine($"Batch {Count} with total {trie.Size} nodes");
             }
 
-            words.Insert(word, resourceName);
+            trie.Insert(key, resourceName);
             
         }
 
@@ -50,7 +63,6 @@ namespace coresearch
             string wordToReturn = rgx.Replace(word, "");
             wordToReturn = wordToReturn.Trim();
             wordToReturn = wordToReturn.ToLower();
-
             return wordToReturn;
         }
 
@@ -60,7 +72,7 @@ namespace coresearch
 
             List<string> toReturn = new List<string>();
 
-            HashSet<string> hs = words.GetData(wordToSearch);
+            HashSet<string> hs = trie.GetData(wordToSearch);
 
             foreach (string el in hs)
             {
@@ -68,6 +80,61 @@ namespace coresearch
             }
 
             return toReturn;
+        }
+
+        public void Add(string key, string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsKey(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryGetValue(string key, out string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(KeyValuePair<string, string> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(KeyValuePair<string, string> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(KeyValuePair<string, string>[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(KeyValuePair<string, string> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
     }
 }
