@@ -21,7 +21,7 @@ namespace TrieTest
             {
                 string userInput = Console.ReadLine();
 
-                HashSet<string> results = trie.GetData(userInput);
+                string[] results = trie.GetData(userInput);
 
                 foreach (string el in results)
                 {

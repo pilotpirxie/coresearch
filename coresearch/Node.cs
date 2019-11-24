@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace coresearch
 {
-    public class Node
+    public class Node : ICollection<string>
     {
         private Node _parent;
         private char _key;
@@ -12,9 +13,12 @@ namespace coresearch
 
         internal Node Parent { get => _parent; set => _parent = value; }
         public char Key { get => _key; set => _key = value; }
-        public HashSet<string> Data { get => _data; set => _data = value; }
         public List<Node> Children { get => _children; set => _children = value; }
         public int Depth { get => _depth; set => _depth = value; }
+
+        public int Count => _data.Count;
+
+        public bool IsReadOnly => false;
 
         public Node(Node parent, char key, string data = null, int depth = 0)
         {
@@ -22,7 +26,7 @@ namespace coresearch
             Key = key;
             if (data != null)
             {
-                Data.Add(data);
+                _data.Add(data);
             }
             Depth = depth;
         }
@@ -64,6 +68,48 @@ namespace coresearch
         public bool ContainsData(string dataToCompare)
         {
             return _data.Contains(dataToCompare);
+        }
+
+        public void Add(string item)
+        {
+            _data.Add(item);
+        }
+
+        public void Clear()
+        {
+            _data.Clear();
+        }
+
+        public string[] GetData()
+        {
+            string[] dataToReturn = new string[_data.Count];
+            _data.CopyTo(dataToReturn);
+            return dataToReturn;
+        }
+
+        public bool Contains(string item)
+        {
+            return _data.Contains(item);
+        }
+
+        public void CopyTo(string[] array, int arrayIndex)
+        {
+            _data.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(string item)
+        {
+            return _data.Remove(item);
+        }
+
+        public IEnumerator<string> GetEnumerator()
+        {
+            return _data.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _data.GetEnumerator();
         }
     }
 }
