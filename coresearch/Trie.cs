@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace coresearch
 {
@@ -69,7 +70,7 @@ namespace coresearch
 
     public class Trie
     {
-        private readonly Node _root;
+        private Node _root;
         private int _size;
 
         public int Size { get => _size; set => _size = value; }
@@ -151,6 +152,12 @@ namespace coresearch
             {
                 return false;
             }
+        }
+
+        public void Flush()
+        {
+            _root = new Node(null, ' ', null, 0);
+            GC.Collect();
         }
 
         public void BatchInsert(List<KeyValuePair<string, string>> items)

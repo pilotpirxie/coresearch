@@ -20,7 +20,7 @@ namespace coresearch
 
         public int Count { get => _count; }
 
-        private void AddKey(string key, string resourceName)
+        private void Insert(string key, string resourceName)
         {
             _count++;
 
@@ -35,13 +35,13 @@ namespace coresearch
             
         }
 
-        public void InsertResource(string resourceName, string content, string meta)
+        public void InsertResource(string resourceName, string content)
         {
             string[] contentWords = content.Split(' ');
 
             foreach (string word in contentWords)
             {
-                AddKey(word, resourceName);
+                Insert(word, resourceName);
             }
         }
 
@@ -50,6 +50,7 @@ namespace coresearch
             string wordToReturn = rgx.Replace(word, "");
             wordToReturn = wordToReturn.Trim();
             wordToReturn = wordToReturn.ToLower();
+
             return wordToReturn;
         }
 
@@ -59,11 +60,11 @@ namespace coresearch
 
             List<string> toReturn = new List<string>();
 
-            HashSet<string> hs = trie.GetData(wordToSearch);
+            HashSet<string> data = trie.GetData(wordToSearch);
 
-            foreach (string el in hs)
+            foreach (string element in data)
             {
-                toReturn.Add(el);
+                toReturn.Add(element);
             }
 
             return toReturn;
@@ -72,6 +73,11 @@ namespace coresearch
         public bool Remove(string key)
         {
             return trie.Remove(key);
+        }
+
+        public void Flush()
+        {
+            trie.Flush();
         }
     }
 }

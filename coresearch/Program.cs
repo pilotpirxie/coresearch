@@ -34,6 +34,7 @@ namespace coresearch
                 foreach (string el in results)
                 {
                     Console.WriteLine(el);
+                    coresearch.Flush();
                 }
             }
         }
