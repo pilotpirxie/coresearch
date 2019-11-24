@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace coresearch
 {
-    public class Coresearch : IDictionary<string, string>
+    public class Coresearch
     {
         private Trie trie = new Trie();
         private int _count = 0;
@@ -20,18 +19,6 @@ namespace coresearch
         public bool Debug { get => _debug; set => _debug = value; }
 
         public int Count { get => _count; }
-
-        public ICollection<string> Keys => throw new NotImplementedException();
-
-        public ICollection<string> Values => throw new NotImplementedException();
-
-        public bool IsReadOnly => throw new NotImplementedException();
-
-        string IDictionary<string, string>.this[string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public object this[string key] {
-            get => Get(key.ToString());
-            set => AddKey(key.ToString(), value.ToString());
-        }
 
         private void AddKey(string key, string resourceName)
         {
@@ -66,9 +53,9 @@ namespace coresearch
             return wordToReturn;
         }
 
-        public List<string> Get(string word)
+        public List<string> Get(string key)
         {
-            string wordToSearch = PreProcessWord(word);
+            string wordToSearch = PreProcessWord(key);
 
             List<string> toReturn = new List<string>();
 
@@ -82,59 +69,9 @@ namespace coresearch
             return toReturn;
         }
 
-        public void Add(string key, string value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool ContainsKey(string key)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool Remove(string key)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool TryGetValue(string key, out string value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Add(KeyValuePair<string, string> item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Clear()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Contains(KeyValuePair<string, string> item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CopyTo(KeyValuePair<string, string>[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Remove(KeyValuePair<string, string> item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
+            return trie.Remove(key);
         }
     }
 }

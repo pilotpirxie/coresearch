@@ -131,7 +131,7 @@ namespace coresearch
             return new HashSet<string> () { };
         }
 
-        public void Remove(string key)
+        public bool Remove(string key)
         {
             if (ContainsKey(key))
             {
@@ -144,6 +144,12 @@ namespace coresearch
                     _size -= 1;
                     prefix = parent;
                 }
+
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
