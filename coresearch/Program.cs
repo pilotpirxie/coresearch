@@ -8,7 +8,8 @@ namespace coresearch
     {
         private static int _filesCount = 0;
         private static Coresearch _coresearch;
-        private static string prompt = "> ";
+        private static string _prompt = "> ";
+
         private static void LoadFromSource(string path, string extension)
         {
             foreach (string file in Directory.EnumerateFiles(path, extension, SearchOption.AllDirectories))
@@ -20,13 +21,20 @@ namespace coresearch
                 }
             }
 
-            Console.WriteLine($"Words inserted {_coresearch.Count} from {_filesCount} files with memory usage of {GC.GetTotalMemory(false)}");
+            if (_coresearch.Debug)
+            {
+                Console.WriteLine($"Words inserted {_coresearch.Count} from {_filesCount} files with memory usage of {GC.GetTotalMemory(false)}");
+            }
         }
 
         private static void Search(string key)
         {
             List<string> results = _coresearch.Get(key);
-            Console.WriteLine($"{results.Count} results for {key}");
+
+            if (_coresearch.Debug)
+            {
+                Console.WriteLine($"{results.Count} results for {key}");
+            }
 
             foreach (string el in results)
             {
@@ -51,17 +59,112 @@ namespace coresearch
 
         private static void Flush()
         {
-                _coresearch.Flush();
+            _coresearch.Flush();
+            _filesCount = 0;
         }
 
-        static void Main(string[] args)
+        private static void SetDebug(bool newStatus)
         {
+            _coresearch.Debug = newStatus;
+        }
+
+        private static void ShowInfo()
+        {
+            Console.WriteLine($"Nodes in trie: {_coresearch.Trie.Size}");
+            Console.WriteLine($"Words inserted: {_coresearch.Count}");
+            Console.WriteLine($"Resource files: {_filesCount}");
+            Console.WriteLine($"Memory usage: {GC.GetTotalMemory(false)} bytes");
+        }
+
+        static int Main(string[] args)
+        {
+            bool debug = false;
+            int memoryLimit = 0;
+            bool normalize = true;
+            string pattern = "[^a-zA-Z0-9 -]";
+
+            string initialSource = "";
+            string initialExtension = "*.*";
+
+            try
+            {
+                for (int i = 0; i < args.Length; i++)
+                {
+                    if (args[i] == "--help" || args[i] == "-h")
+                    {
+                        Console.WriteLine($"--debug -d Show additional information");
+                        Console.WriteLine($"--help -h Show help");
+                        Console.WriteLine($"--memory-limit -m Max memory size. 0 for disable");
+                        Console.WriteLine($"--normalize -n Pre-process every word before insert");
+                        Console.WriteLine($"--pattern -p Pattern for removing unwanted characters, used for each word before insert");
+                    }
+
+                    if (args[i] == "--debug" || args[i] == "-d")
+                    {
+                        if (args[i + 1].IndexOf("-") != 0)
+                        {
+                            debug = args[i + 1] == "true";
+                        }
+                    }
+
+                    if (args[i] == "--memory-limit" || args[i] == "-m")
+                    {
+                        if (args[i + 1].IndexOf("-") != 0)
+                        {
+                            memoryLimit = Convert.ToInt32(args[i + 1]);
+                        }
+                    }
+
+                    if (args[i] == "--normalize" || args[i] == "-n")
+                    {
+                        if (args[i + 1].IndexOf("-") != 0)
+                        {
+                            normalize = args[i + 1] == "true";
+                        }
+                    }
+
+                    if (args[i] == "--pattern" || args[i] == "-p")
+                    {
+                        if (args[i + 1].IndexOf("-") != 0)
+                        {
+                            pattern = args[i + 1];
+                        }
+                    }
+
+                    if (args[i] == "--source" || args[i] == "-s")
+                    {
+                        if (args[i + 1].IndexOf("-") != 0)
+                        {
+                            initialSource = args[i + 1];
+                        }
+                    }
+
+                    if (args[i] == "--extension" || args[i] == "-e")
+                    {
+                        if (args[i + 1].IndexOf("-") != 0)
+                        {
+                            initialExtension = args[i + 1];
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Wrong arguments {Environment.NewLine} {ex.ToString()}");
+                return -2;
+            }
+
             // sample data http://mlg.ucd.ie/datasets/bbc.html
-            _coresearch = new Coresearch(true);
+            _coresearch = new Coresearch(debug, normalize, pattern, memoryLimit);
+
+            if (initialSource != "")
+            {
+                LoadFromSource(initialSource, initialExtension);
+            }
 
             while (true)
             {
-                Console.Write(prompt);
+                Console.Write(_prompt);
                 string userInput = Console.ReadLine();
 
                 string[] command = userInput.Split(' ');
@@ -88,6 +191,15 @@ namespace coresearch
                         break;
                     case "flush":
                         Flush();
+                        break;
+                    case "info":
+                        ShowInfo();
+                        break;
+                    case "clear":
+                        Console.Clear();
+                        break;
+                    case "debug":
+                        if (command.Length == 2) SetDebug(command[1] == "true");
                         break;
                     default:
                         break;

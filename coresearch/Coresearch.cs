@@ -6,12 +6,16 @@ namespace coresearch
 {
     public class Coresearch
     {
-        private Trie trie = new Trie();
+        private Trie _trie = new Trie();
+        public Trie Trie {
+            get => _trie;
+        }
+
         private int _count = 0;
         private bool _debug = false;
-        private bool _normalize = false;
-        private Regex _rgx;
-        private int _memoryLimit = 0;
+        private readonly bool _normalize = true;
+        private readonly Regex _rgx;
+        private readonly int _memoryLimit = 0;
 
         public Coresearch(bool debug = false, bool normalize = true, string normalizePattern = "[^a-zA-Z0-9 -]", int memoryLimit = 0)
         {
@@ -33,11 +37,11 @@ namespace coresearch
 
                 if (_debug && Count % 50000 == 0)
                 {
-                    Console.WriteLine($"Batch {Count} with total {trie.Size} nodes with memory size of {GC.GetTotalMemory(false)} bytes ");
+                    Console.WriteLine($"Batch {Count} with total {_trie.Size} nodes with memory size of {GC.GetTotalMemory(false)} bytes ");
                 }
 
                 _count++;
-                trie.Insert(key, resourceName);
+                _trie.Insert(wordToInsert, resourceName);
 
                 return true;
             }
@@ -62,7 +66,7 @@ namespace coresearch
             return text;
         }
 
-        public string PreProcessWord(string word)
+        private string PreProcessWord(string word)
         {
             string wordToReturn;
             if (_normalize)
@@ -85,7 +89,7 @@ namespace coresearch
 
             List<string> toReturn = new List<string>();
 
-            HashSet<string> data = trie.GetData(wordToSearch);
+            string[] data = _trie.GetData(wordToSearch);
 
             foreach (string element in data)
             {
@@ -97,12 +101,13 @@ namespace coresearch
 
         public bool Remove(string key)
         {
-            return trie.Remove(key);
+            return _trie.Remove(key);
         }
 
         public void Flush()
         {
-            trie.Flush();
+            _count = 0;
+            _trie.Flush();
         }
     }
 }

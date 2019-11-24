@@ -47,7 +47,7 @@ namespace coresearch
                 _size += 1;
             }
 
-            current.Data.Add(data);
+            current.Add(data);
         }
 
         public bool ContainsKey(string key)
@@ -56,15 +56,15 @@ namespace coresearch
             return prefix.Depth == key.Length && prefix.ContainsData();
         }
 
-        public HashSet<string> GetData(string key)
+        public string[] GetData(string key)
         {
             if (ContainsKey(key))
             {
                 Node prefix = TraversePrefix(key);
-                return prefix.Data;
+                return prefix.GetData();
             }
 
-            return new HashSet<string> () { };
+            return new string[] { };
         }
 
         public bool Remove(string key)
@@ -92,6 +92,7 @@ namespace coresearch
         public void Flush()
         {
             _root = new Node(null, ' ', null, 0);
+            _size = 0;
             GC.Collect();
         }
 

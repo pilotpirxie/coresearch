@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "coresearch": {
+      "commandName": "Project",
+      "commandLineArgs": "--source ./ --extension *.txt --debug true"
+    }
+  }
+}
