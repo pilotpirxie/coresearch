@@ -10,16 +10,18 @@ namespace coresearch
         {
             // sample data http://mlg.ucd.ie/datasets/bbc.html
             Coresearch coresearch = new Coresearch(true);
+            int filesCount = 0;
 
             foreach (string file in Directory.EnumerateFiles("./", "*.txt", SearchOption.AllDirectories))
             {
+                filesCount++;
                 foreach (string line in File.ReadLines(file))
                 {
                     coresearch.InsertResource(file, line.Replace(";", ""));
                 }
             }
 
-            Console.WriteLine($"Words inserted {coresearch.Count}");
+            Console.WriteLine($"Words inserted {coresearch.Count} from {filesCount} files with memory usage of {GC.GetTotalMemory(false)}");
 
             while (true)
             {

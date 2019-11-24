@@ -25,19 +25,26 @@ namespace coresearch
 
         public int Count { get => _count; }
 
-        private void Insert(string key, string resourceName)
+        private bool Insert(string key, string resourceName)
         {
-            _count++;
-
-            string wordToInsert = PreProcessWord(key);
-
-            if (_debug && Count % 50000 == 0)
+            if (_memoryLimit == 0 || GC.GetTotalMemory(false) < _memoryLimit)
             {
-                Console.WriteLine($"Batch {Count} with total {trie.Size} nodes with memory size of {GC.GetTotalMemory(false)} bytes ");
-            }
+                string wordToInsert = PreProcessWord(key);
 
-            trie.Insert(key, resourceName);
-            
+                if (_debug && Count % 50000 == 0)
+                {
+                    Console.WriteLine($"Batch {Count} with total {trie.Size} nodes with memory size of {GC.GetTotalMemory(false)} bytes ");
+                }
+
+                _count++;
+                trie.Insert(key, resourceName);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void InsertResource(string resourceName, string content)
