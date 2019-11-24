@@ -15,11 +15,8 @@ namespace coresearch
             {
                 foreach (string line in File.ReadLines(file))
                 {
-                    coresearch.InsertResource(file, line.Replace(";", ""), file);
+                    coresearch.InsertResource(file, line.Replace(";", ""));
                 }
-
-                GC.Collect();
-                
             }
 
             Console.WriteLine($"Words inserted {coresearch.Count}");
@@ -34,7 +31,6 @@ namespace coresearch
                 foreach (string el in results)
                 {
                     Console.WriteLine(el);
-                    coresearch.Flush();
                 }
             }
         }

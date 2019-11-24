@@ -9,11 +9,16 @@ namespace coresearch
         private Trie trie = new Trie();
         private int _count = 0;
         private bool _debug = false;
-        private Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+        private bool _normalize = false;
+        private Regex _rgx;
+        private int _memoryLimit = 0;
 
-        public Coresearch(bool debug)
+        public Coresearch(bool debug = false, bool normalize = true, string normalizePattern = "[^a-zA-Z0-9 -]", int memoryLimit = 0)
         {
             _debug = debug;
+            _normalize = normalize;
+            _rgx = new Regex(normalizePattern);
+            _memoryLimit = memoryLimit;
         }
 
         public bool Debug { get => _debug; set => _debug = value; }
@@ -28,7 +33,7 @@ namespace coresearch
 
             if (_debug && Count % 50000 == 0)
             {
-                Console.WriteLine($"Batch {Count} with total {trie.Size} nodes");
+                Console.WriteLine($"Batch {Count} with total {trie.Size} nodes with memory size of {GC.GetTotalMemory(false)} bytes ");
             }
 
             trie.Insert(key, resourceName);
@@ -45,11 +50,24 @@ namespace coresearch
             }
         }
 
+        public string Echo(string text)
+        {
+            return text;
+        }
+
         public string PreProcessWord(string word)
         {
-            string wordToReturn = rgx.Replace(word, "");
-            wordToReturn = wordToReturn.Trim();
-            wordToReturn = wordToReturn.ToLower();
+            string wordToReturn;
+            if (_normalize)
+            {
+                wordToReturn = _rgx.Replace(word, "");
+                wordToReturn = wordToReturn.Trim();
+                wordToReturn = wordToReturn.ToLower();
+            }
+            else
+            {
+                wordToReturn = word;
+            }
 
             return wordToReturn;
         }

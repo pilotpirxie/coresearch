@@ -127,7 +127,7 @@ namespace coresearch
             {
                 Node prefix = TraversePrefix(key);
                 return prefix.Data;
-            } 
+            }
 
             return new HashSet<string> () { };
         }
