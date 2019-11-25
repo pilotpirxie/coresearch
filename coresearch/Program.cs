@@ -97,6 +97,8 @@ namespace coresearch
                         Console.WriteLine($"--memory-limit -m Max memory size. 0 for disable");
                         Console.WriteLine($"--normalize -n Pre-process every word before insert");
                         Console.WriteLine($"--pattern -p Pattern for removing unwanted characters, used for each word before insert");
+                        Console.WriteLine($"--source -s Load data from specific path at start");
+                        Console.WriteLine($"--extension -e Set extension for loading data at start");
                     }
 
                     if (args[i] == "--debug" || args[i] == "-d")
