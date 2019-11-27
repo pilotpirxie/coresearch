@@ -17,8 +17,9 @@ About
 * Easily handle **large amount of different resources**
 
 <p align="center">
-    <img src="img/1024px-Trie_example.png" alt="Sample usage"/>
+ <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Trie_example.svg/1024px-Trie_example.svg.png" alt="Trie"/>
 </p>
+
 [Trie on Wikipedia](https://en.wikipedia.org/wiki/Trie)
 
 ## CLI commands
