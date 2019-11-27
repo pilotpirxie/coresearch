@@ -1,3 +1,6 @@
+<p align="center">
+ <img src="https://i.imgur.com/EUHKODL.png" alt="Coresearch"/>
+</p>
 
 # coresearch
  .NET Core cross-platform, in-memory, full text search library for building search engines
@@ -13,7 +16,7 @@ About
 * **Wildcard search** for recursive depth-first search tree traversal  
 * **Character match** search with deep level k+1
 * Simple **command line** tool and **library**
-* **Cross platform**, runs on Linux, MacOS and Windows
+* **Cross-platform**, runs on Linux, MacOS and Windows
 * Easily handle **large amount of different resources**
 
 <p align="center">
