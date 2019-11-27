@@ -42,6 +42,26 @@ namespace coresearch
             }
         }
 
+        private static void Query(string key)
+        {
+            List<string> results = _coresearch.Query(key);
+
+            if (_coresearch.Debug)
+            {
+                Console.WriteLine($"{results.Count} results for {key}");
+            }
+
+            foreach (string el in results)
+            {
+                Console.WriteLine(el);
+            }
+
+            if (_coresearch.Debug)
+            {
+                Console.WriteLine($"{results.Count} results for {key}");
+            }
+        }
+
         private static void Insert(string resourceName, string content)
         {
             _coresearch.InsertResource(resourceName, content);
@@ -180,6 +200,9 @@ namespace coresearch
                     case "get":
                     case "search":
                         if (command.Length == 2) Search(command[1]);
+                        break;
+                    case "query":
+                        if (command.Length == 2) Query(command[1]);
                         break;
                     case "add":
                     case "insert":

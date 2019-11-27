@@ -99,6 +99,22 @@ namespace coresearch
             return toReturn;
         }
 
+        public List<string> Query(string key)
+        {
+            string wordToSearch = PreProcessWord(key);
+
+            List<string> toReturn = new List<string>();
+
+            HashSet<string> data = _trie.GetDataRecursive(wordToSearch);
+
+            foreach (string element in data)
+            {
+                toReturn.Add(element);
+            }
+
+            return toReturn;
+        }
+
         public bool Remove(string key)
         {
             return _trie.Remove(key);

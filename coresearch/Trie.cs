@@ -7,6 +7,7 @@ namespace coresearch
     {
         private Node _root;
         private int _size;
+        private HashSet<string> _searchData;
 
         public int Size { get => _size; set => _size = value; }
 
@@ -65,6 +66,27 @@ namespace coresearch
             }
 
             return new string[] { };
+        }
+
+        public HashSet<string> GetDataRecursive(string key)
+        {
+            _searchData = new HashSet<string>();
+            Node prefix = TraversePrefix(key);
+            GetDataFromChildren(prefix);
+            return _searchData;
+        }
+
+        public void GetDataFromChildren(Node prefix)
+        {
+            for (int i = 0; i < prefix.Children.Count; i++)
+            {
+                GetDataFromChildren(prefix.Children[i]);
+            }
+
+            foreach (string dataChild in prefix.GetData())
+            {
+                _searchData.Add(dataChild);
+            }
         }
 
         public bool Remove(string key)
