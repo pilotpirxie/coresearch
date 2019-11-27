@@ -5,9 +5,12 @@
 # coresearch
  .NET Core cross-platform, in-memory, full text search library for building search engines
 
-About
------
+## About
 **Coresearch** uses an inverted index with a boosted trie data structure for indexing atomic search criterion from content to resources. Trie algorithm makes Coresearch more elastic and allows both exact word querying and operations like fuzzy search, wildcards and character matching. Entire trie structure is stored in memory for better performance. The entire project was written as a learning project so be aware of putting in on the production 😉
+
+<p align="center">
+ <img src="https://i.imgur.com/w3BSIkm.gif" alt="Trie"/>
+</p>
 
 ## Features
 * Efficient **inverted index** algorithm (mapping from content to resources)
@@ -24,6 +27,10 @@ About
 </p>
 
 [Trie on Wikipedia](https://en.wikipedia.org/wiki/Trie)
+
+<p align="center">
+ <img src="https://i.imgur.com/KtePNXo.gif" alt="Trie"/>
+</p>
 
 ## CLI commands
 ### Load data from files in specific path and extension (recursive)
@@ -49,12 +56,12 @@ output:
 <resource names for key cars>
 ```
 
-### Search for every resource names which key starts with prefix. 
+### Search for every resource name which key starts with prefix 
 
 Query modes:
 * Question mark (?) is for select of all resource names belong to children of specific node (if any).
 * Wildcard sign (\*) is for select of all resource names recursively under specific prefix.
-* Exact matching (without any sign) produces equal output as get/search.
+* Exact matching (without any sign) produces equal output as get/search command.
 ```
 query <string prefix> <query mode: . or *>
 ```
@@ -78,7 +85,7 @@ output:
 <resource names for key cars>
 ```
 
-### Add resource with content
+### Add resource under key (word)
 ```
 add <string resource name> <string content>
 alias: insert
@@ -88,7 +95,7 @@ example:
 > add english-dict.txt house 
 ```
 
-### Remove specific word (key)
+### Remove specific key (word)
 ```
 delete <string key>
 ```
@@ -120,7 +127,7 @@ example:
 > debug true
 ```
 
-### Remove every word (key) and collect memory
+### Remove every node in structure and collect memory
 ```
 flush
 ```
