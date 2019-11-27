@@ -57,7 +57,7 @@ namespace coresearch
             return prefix.Depth == key.Length && prefix.ContainsData();
         }
 
-        public string[] GetData(string key)
+        public string[] GetDataFromExactNode(string key)
         {
             if (ContainsKey(key))
             {
@@ -68,19 +68,37 @@ namespace coresearch
             return new string[] { };
         }
 
-        public HashSet<string> GetDataRecursive(string key)
+        public HashSet<string> GetDataFromChildrenNodes(string key)
+        {
+            Node prefix = TraversePrefix(key);
+            HashSet<string> toReturn = new HashSet<string>();
+
+            for (int i = 0; i < prefix.Children.Count; i++)
+            {
+                string[] currentChildrenData = prefix.Children[i].GetData();
+                for (int j = 0; j < currentChildrenData.Length; j++)
+                {
+                    toReturn.Add(currentChildrenData[j]);
+
+                }
+            }
+
+            return toReturn;
+        }
+
+        public HashSet<string> GetDataFromChildrenNodesRecursive(string key)
         {
             _searchData = new HashSet<string>();
             Node prefix = TraversePrefix(key);
-            GetDataFromChildren(prefix);
+            GetDataRecursive(prefix);
             return _searchData;
         }
 
-        public void GetDataFromChildren(Node prefix)
+        public void GetDataRecursive(Node prefix)
         {
             for (int i = 0; i < prefix.Children.Count; i++)
             {
-                GetDataFromChildren(prefix.Children[i]);
+                GetDataRecursive(prefix.Children[i]);
             }
 
             foreach (string dataChild in prefix.GetData())

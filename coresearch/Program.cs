@@ -23,7 +23,7 @@ namespace coresearch
 
             if (_coresearch.Debug)
             {
-                Console.WriteLine($"Words inserted {_coresearch.Count} from {_filesCount} files with memory usage of {GC.GetTotalMemory(false)}");
+                Console.WriteLine($"Words inserted {_coresearch.Count} from {_filesCount} files with memory usage of {GC.GetTotalMemory(false)} bytes");
             }
         }
 
@@ -42,9 +42,9 @@ namespace coresearch
             }
         }
 
-        private static void Query(string key)
+        private static void QueryDeep(string key)
         {
-            List<string> results = _coresearch.Query(key);
+            List<string> results = _coresearch.QueryDeep(key);
 
             if (_coresearch.Debug)
             {
@@ -55,10 +55,20 @@ namespace coresearch
             {
                 Console.WriteLine(el);
             }
+        }
+
+        private static void QueryShallow(string key)
+        {
+            List<string> results = _coresearch.QueryShallow(key);
 
             if (_coresearch.Debug)
             {
                 Console.WriteLine($"{results.Count} results for {key}");
+            }
+
+            foreach (string el in results)
+            {
+                Console.WriteLine(el);
             }
         }
 
@@ -202,7 +212,10 @@ namespace coresearch
                         if (command.Length == 2) Search(command[1]);
                         break;
                     case "query":
-                        if (command.Length == 2) Query(command[1]);
+                        if (command.Length == 2) Search(command[1]);
+                        if (command.Length == 3 && command[2] == "?") QueryShallow(command[1]);
+                        if (command.Length == 3 && command[2] == "*") QueryDeep(command[1]);
+
                         break;
                     case "add":
                     case "insert":

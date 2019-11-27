@@ -89,7 +89,7 @@ namespace coresearch
 
             List<string> toReturn = new List<string>();
 
-            string[] data = _trie.GetData(wordToSearch);
+            string[] data = _trie.GetDataFromExactNode(wordToSearch);
 
             foreach (string element in data)
             {
@@ -99,13 +99,29 @@ namespace coresearch
             return toReturn;
         }
 
-        public List<string> Query(string key)
+        public List<string> QueryDeep(string key)
         {
             string wordToSearch = PreProcessWord(key);
 
             List<string> toReturn = new List<string>();
 
-            HashSet<string> data = _trie.GetDataRecursive(wordToSearch);
+            HashSet<string> data = _trie.GetDataFromChildrenNodesRecursive(wordToSearch);
+
+            foreach (string element in data)
+            {
+                toReturn.Add(element);
+            }
+
+            return toReturn;
+        }
+
+        public List<string> QueryShallow(string key)
+        {
+            string wordToSearch = PreProcessWord(key);
+
+            List<string> toReturn = new List<string>();
+
+            HashSet<string> data = _trie.GetDataFromChildrenNodes(wordToSearch);
 
             foreach (string element in data)
             {
