@@ -1,9 +1,19 @@
 # coresearch
- .NET Core cross-platform, in-memory, simple, full text search library
+ .NET Core cross-platform, in-memory, full text search library for building search engines
 
 About
 -----
 Coresearch uses an inverted index with a boosted trie data structure for indexing atomic search criterion from content to resources. Trie algorithm makes Coresearch more elastic and allows both exact word querying and operations like fuzzy search, wildcards and character matching. Entire trie structure is stored in memory for better performance. The entire project was written as a learning project so be aware of putting in on the production 😉
+
+## Features
+* Efficient **inverted index** algorithm (mapping from content to resources)
+* Uses **Prefix Tree (Trie)** data structure for quick search and horizontal scaling
+* **Exact search** with super fast O(k) worst case time, where k is the key length 
+* **Wildcard search** for recursive depth-first search tree traversal  
+* **Character match** search with deep level k+1
+* Simple **command line** tool and **library**
+* **Cross platform**, runs on Linux, MacOS and Windows
+* Easily handle **large amount of different resources**
 
 ## CLI commands
 Load data from files in specific path and extension (recursive)
@@ -25,23 +35,30 @@ output:
 ```
 
 Search for every resource names which key starts with prefix. 
+
 Query modes:
 * Question mark (?) is for select of all resource names belong to children of specific node (if any).
 * Wildcard sign (\*) is for select of all resource names recursively under specific prefix.
 * Exact matching (without any sign) produces equal output as get/search.
 ```
 query <string prefix> <query mode: . or *>
+```
 
+```
 example 1: 
 query c?
 output: 
 <resource names for keys: ca, cb, c5, co, c1, ...>
+```
 
+```
 example 2: 
 query c*
 output: 
 <resource names for keys: ca, cabbage, c4a541, cars, cardio, cantaloupe, ...>
+```
 
+```
 example 3: 
 query cars
 output: 
@@ -52,7 +69,9 @@ Add resource with content
 ```
 add <string resource name> <string content>
 alias: insert
+```
 
+```
 example:
 add english-dict.txt house 
 ```
@@ -60,7 +79,9 @@ add english-dict.txt house
 Remove specific word (key)
 ```
 delete <string key>
+```
 
+```
 example:
 delete sport
 ```
@@ -68,7 +89,9 @@ delete sport
 Echo
 ```
 echo <string content>
+```
 
+```
 example:
 echo hello
 output:
@@ -78,7 +101,9 @@ hello
 Turn on/off debug mode
 ```
 debug <bool>
+```
 
+```
 example:
 bool true
 ```
@@ -86,7 +111,9 @@ bool true
 Remove every word (key) and collect memory
 ```
 flush
+```
 
+```
 example:
 flush
 ```
@@ -94,7 +121,9 @@ flush
 Show information
 ```
 info
+```
 
+```
 example:
 flush
 output:
@@ -107,7 +136,9 @@ Memory usage: 1044944640 bytes
 Clear console
 ```
 clear
+```
 
+```
 example:
 clear
 ```
