@@ -16,7 +16,9 @@ About
 * **Cross platform**, runs on Linux, MacOS and Windows
 * Easily handle **large amount of different resources**
 
-![Prefix Tree (Trie) Data Structure](img/1024px-Trie_example.png)
+<p align="center">
+    <img src="img/1024px-Trie_example.png" alt="Sample usage"/>
+</p>
 [Trie on Wikipedia](https://en.wikipedia.org/wiki/Trie)
 
 ## CLI commands
