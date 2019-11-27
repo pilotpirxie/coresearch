@@ -16,7 +16,8 @@ About
 * **Cross platform**, runs on Linux, MacOS and Windows
 * Easily handle **large amount of different resources**
 
-![Prefix Tree (Trie) Data Structure](/img/1024px-Trie_example.png)[Trie on Wikipedia](https://en.wikipedia.org/wiki/Trie)
+![Prefix Tree (Trie) Data Structure](img/1024px-Trie_example.png)
+[Trie on Wikipedia](https://en.wikipedia.org/wiki/Trie)
 
 ## CLI commands
 ### Load data from files in specific path and extension (recursive)
