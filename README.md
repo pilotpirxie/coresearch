@@ -10,47 +10,105 @@ Load data from files in specific path and extension (recursive)
 ```
 source <string path> <string extension>
 alias: load
+example: source ./ *.txt
 ```
 
-Get resource name from specific word
+Get resource names for exact key (word)
 ```
 get <string key>
 alias: search
+
+example: 
+search cars
+output:
+<resource names for key cars>
+```
+
+Search for every resource names which key starts with prefix. 
+Query modes:
+Question mark (?) is for select of all resource names belong to children of specific node (if any).
+Wildcard sign (\*) is for select of all resource names recursively under specific prefix.
+Exact matching (without any sign) produces equal output as get/search.
+```
+query <string prefix> <query mode: . or *>
+
+example 1: 
+query c?
+output: 
+<resource names for keys: ca, cb, c5, co, c1, ...>
+
+example 2: 
+query c*
+output: 
+<resource names for keys: ca, cabbage, c4a541, cars, cardio, cantaloupe, ...>
+
+example 3: 
+query cars
+output: 
+<resource names for key cars>
 ```
 
 Add resource with content
 ```
 add <string resource name> <string content>
 alias: insert
+
+example:
+add english-dict.txt house 
 ```
 
 Remove specific word (key)
 ```
 delete <string key>
+
+example:
+delete sport
 ```
 
 Echo
 ```
 echo <string content>
+
+example:
+echo hello
+output:
+hello
 ```
 
 Turn on/off debug mode
 ```
 debug <bool>
+
+example:
+bool true
 ```
 
 Remove every word (key) and collect memory
 ```
+flush
+
+example:
 flush
 ```
 
 Show information
 ```
 info
+
+example:
+flush
+output:
+Nodes in trie: 4651175
+Words inserted: 15513389
+Resource files: 2227
+Memory usage: 1044944640 bytes
 ```
 
 Clear console
 ```
+clear
+
+example:
 clear
 ```
 
