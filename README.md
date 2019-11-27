@@ -26,9 +26,9 @@ output:
 
 Search for every resource names which key starts with prefix. 
 Query modes:
-Question mark (?) is for select of all resource names belong to children of specific node (if any).
-Wildcard sign (\*) is for select of all resource names recursively under specific prefix.
-Exact matching (without any sign) produces equal output as get/search.
+* Question mark (?) is for select of all resource names belong to children of specific node (if any).
+* Wildcard sign (\*) is for select of all resource names recursively under specific prefix.
+* Exact matching (without any sign) produces equal output as get/search.
 ```
 query <string prefix> <query mode: . or *>
 
