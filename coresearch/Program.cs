@@ -4,7 +4,7 @@ using System.IO;
 
 namespace coresearch
 {
-    static class Program
+    public static class Program
     {
         private static int _filesCount = 0;
         private static Coresearch _coresearch;
@@ -199,49 +199,53 @@ namespace coresearch
                 Console.Write(_prompt);
                 string userInput = Console.ReadLine();
 
-                string[] command = userInput.Split(' ');
+                ParseInput(userInput);
+            }
+        }
 
-                switch (command[0])
-                {
-                    case "source":
-                    case "load":
-                        if (command.Length == 3) LoadFromSource(command[1], command[2]);
-                        break;
-                    case "get":
-                    case "search":
-                        if (command.Length == 2) Search(command[1]);
-                        break;
-                    case "query":
-                        if (command.Length == 2) Search(command[1]);
-                        if (command.Length == 3 && command[2] == "?") QueryShallow(command[1]);
-                        if (command.Length == 3 && command[2] == "*") QueryDeep(command[1]);
+        static void ParseInput(string userInput)
+        {
+            string[] command = userInput.Split(' ');
 
-                        break;
-                    case "add":
-                    case "insert":
-                        if (command.Length == 3) Insert(command[1], command[2]);
-                        break;
-                    case "delete":
-                        if (command.Length == 2) Delete(command[1]);
-                        break;
-                    case "echo":
-                        if (command.Length == 2) Echo(command[1]);
-                        break;
-                    case "flush":
-                        Flush();
-                        break;
-                    case "info":
-                        ShowInfo();
-                        break;
-                    case "clear":
-                        Console.Clear();
-                        break;
-                    case "debug":
-                        if (command.Length == 2) SetDebug(command[1] == "true");
-                        break;
-                    default:
-                        break;
-                }
+            switch (command[0])
+            {
+                case "source":
+                case "load":
+                    if (command.Length == 3) LoadFromSource(command[1], command[2]);
+                    break;
+                case "get":
+                case "search":
+                    if (command.Length == 2) Search(command[1]);
+                    break;
+                case "query":
+                    if (command.Length == 2) Search(command[1]);
+                    if (command.Length == 3 && command[2] == "?") QueryShallow(command[1]);
+                    if (command.Length == 3 && command[2] == "*") QueryDeep(command[1]);
+                    break;
+                case "add":
+                case "insert":
+                    if (command.Length == 3) Insert(command[1], command[2]);
+                    break;
+                case "delete":
+                    if (command.Length == 2) Delete(command[1]);
+                    break;
+                case "echo":
+                    if (command.Length == 2) Echo(command[1]);
+                    break;
+                case "flush":
+                    Flush();
+                    break;
+                case "info":
+                    ShowInfo();
+                    break;
+                case "clear":
+                    Console.Clear();
+                    break;
+                case "debug":
+                    if (command.Length == 2) SetDebug(command[1] == "true");
+                    break;
+                default:
+                    break;
             }
         }
     }
