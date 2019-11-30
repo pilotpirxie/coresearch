@@ -3,9 +3,10 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
-public class Webserv
+public class Webserver
 {
     static int port = 0;
+    static int requestsCount = 0;
 
     public static void Main()
     {
@@ -35,23 +36,41 @@ public class Webserv
                 listener.Start();
                 Console.WriteLine($"Listening on http://localhost:{port}");
 
-                HttpListenerContext ctx = listener.GetContext();
-                ctx.Response.StatusCode = 200;
-                string name = ctx.Request.QueryString["name"];
-
-                StreamWriter writer = new StreamWriter(ctx.Response.OutputStream);
-                writer.WriteLine("<P>Hello, {0}</P>", name);
-
-                writer.WriteLine("<ul>");
-                foreach (string header in ctx.Request.Headers.Keys)
+                while (true)
                 {
-                    writer.WriteLine("<li><b>{0}:</b> {1}</li>", header, ctx.Request.Headers[header]);
-                }
-                writer.WriteLine("</ul>");
+                    try
+                    {
+                        requestsCount++;
 
-                writer.Close();
-                ctx.Response.Close();
-                listener.Stop();
+                        HttpListenerContext context = listener.GetContext();
+                        HttpListenerRequest request = context.Request;
+                        HttpListenerResponse response = context.Response;
+
+                        Console.WriteLine($"Request #{requestsCount}");
+                        Console.WriteLine($"{request.HttpMethod} {request.Url}");
+                        Console.WriteLine($"{request.UserHostAddress} {request.UserHostName}");
+                        foreach (string header in request.Headers)
+                        {
+                            Console.WriteLine($"{header}: {request.Headers[header]}");
+                        }
+                        foreach (string queryKey in request.QueryString)
+                        {
+                            Console.WriteLine($"{queryKey}={request.QueryString[queryKey]} \n");
+                        }
+
+                        string name = request.QueryString["name"];
+
+                        response.StatusCode = 200;
+                        StreamWriter writer = new StreamWriter(context.Response.OutputStream);
+                        writer.Write($"{name}");
+
+                        writer.Close();
+                        response.Close();
+                    } catch (Exception)
+                    {
+                        Console.WriteLine("Connection error");
+                    }
+                }
             }
         }
     }
