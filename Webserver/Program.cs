@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using coresearch;
 
 namespace Webserver { 
